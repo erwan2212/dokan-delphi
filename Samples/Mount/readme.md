@@ -15,7 +15,8 @@ https://github.com/erwan2212/dokan-delphi/tree/master/Samples/NFS) <br/>
 are now obsolete and superseded by this new "generic dokan mount" example.
 
 7zip proxy example is here : https://github.com/erwan2212/dokan-delphi/tree/master/Samples/Proxy_7zip . <br/>
-NFS proxy example is here : https://github.com/erwan2212/dokan-delphi/tree/master/Samples/Proxy_NFS
+NFS proxy example is here : https://github.com/erwan2212/dokan-delphi/tree/master/Samples/Proxy_NFS . <br/> 
+Libzip proxy example is here : https://github.com/erwan2212/dokan-delphi/tree/master/Samples/Proxy_LibZip
 
 ![Screenshot](screenshot.png)
 
