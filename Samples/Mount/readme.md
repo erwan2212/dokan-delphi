@@ -11,7 +11,7 @@ Mount.exe is a generic code/binary independant of the filesystem you wish to cre
 The filesystem is implemented in a proxy/dll. <br/>
 Previous examples : <br/>
 https://github.com/erwan2212/dokan-delphi/tree/master/Samples/7zip <br/>
-https://github.com/erwan2212/dokan-delphi/tree/master/Samples/7zip) <br/>
+https://github.com/erwan2212/dokan-delphi/tree/master/Samples/NFS) <br/>
 are now obsolete and superseded by this new "generic dokan mount" example.
 
 7zip proxy example is here : https://github.com/erwan2212/dokan-delphi/tree/master/Samples/Proxy_7zip . <br/>
