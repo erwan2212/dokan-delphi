@@ -30,7 +30,7 @@ exports
    _unMount,
    _Cleanup,
    _CloseFile,
-   _MoveFile,
+   _MoveFile;
    //_DeleteFile,
    //_DeleteDirectory;
 

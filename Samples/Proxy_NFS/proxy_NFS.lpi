@@ -11,7 +11,7 @@
       </Flags>
       <SessionStorage Value="InProjectDir"/>
       <MainUnit Value="0"/>
-      <Title Value="proxy_LibZip"/>
+      <Title Value="proxy_NFS"/>
       <UseAppBundle Value="False"/>
       <ResourceType Value="res"/>
     </General>
@@ -22,15 +22,15 @@
           <Version Value="11"/>
           <PathDelim Value="\"/>
           <Target>
-            <Filename Value="proxy_LibZip"/>
+            <Filename Value="proxy_NFS"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
+            <OtherUnitFiles Value="..\..\..\ssh-fpc;..\.."/>
             <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
             <SyntaxOptions>
-              <SyntaxMode Value="Delphi"/>
               <IncludeAssertionCode Value="True"/>
             </SyntaxOptions>
           </Parsing>
@@ -70,12 +70,11 @@
     </RunParams>
     <Units Count="4">
       <Unit0>
-        <Filename Value="proxy_LibZip.dpr"/>
+        <Filename Value="proxy_NFS.dpr"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="proxy_7zip"/>
       </Unit0>
       <Unit1>
-        <Filename Value="ulibzip.pas"/>
+        <Filename Value="unfs.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit1>
       <Unit2>
@@ -92,17 +91,13 @@
     <Version Value="11"/>
     <PathDelim Value="\"/>
     <Target>
-      <Filename Value="proxy_LibZip"/>
+      <Filename Value="proxy_NFS"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
+      <OtherUnitFiles Value="..\..\..\ssh-fpc;..\.."/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
-    <Parsing>
-      <SyntaxOptions>
-        <SyntaxMode Value="Delphi"/>
-      </SyntaxOptions>
-    </Parsing>
     <CodeGeneration>
       <RelocatableUnit Value="True"/>
       <TargetCPU Value="i386"/>

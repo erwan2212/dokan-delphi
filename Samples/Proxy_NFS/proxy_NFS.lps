@@ -9,10 +9,11 @@
           <Version Value="11"/>
           <PathDelim Value="\"/>
           <Target>
-            <Filename Value="proxy_LibZip"/>
+            <Filename Value="proxy_NFS"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
+            <OtherUnitFiles Value="..\.."/>
             <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
@@ -41,122 +42,93 @@
         </CompilerOptions>
       </Item1>
     </BuildModes>
-    <Units Count="7">
+    <Units Count="6">
       <Unit0>
-        <Filename Value="proxy_LibZip.dpr"/>
+        <Filename Value="proxy_NFS.dpr"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="proxy_7zip"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="14"/>
-        <CursorPos X="24" Y="23"/>
-        <UsageCount Value="106"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="20"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit0>
       <Unit1>
-        <Filename Value="ulibzip.pas"/>
+        <Filename Value="unfs.pas"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="656"/>
-        <CursorPos X="3" Y="678"/>
-        <UsageCount Value="106"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="534"/>
+        <CursorPos X="33" Y="548"/>
+        <UsageCount Value="20"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit1>
       <Unit2>
         <Filename Value="..\..\Dokan.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="-1"/>
-        <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="106"/>
+        <UsageCount Value="20"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit2>
       <Unit3>
         <Filename Value="..\..\DokanWin.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="9" Y="7"/>
-        <UsageCount Value="106"/>
+        <UsageCount Value="20"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit3>
       <Unit4>
-        <Filename Value="proxy_LibZip.lpr"/>
+        <Filename Value="proxy_NFS.lpr"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="12"/>
+        <TopLine Value="11"/>
+        <UsageCount Value="20"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit4>
       <Unit5>
-        <Filename Value="libzip.pas"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="55"/>
-        <CursorPos Y="45"/>
-        <UsageCount Value="11"/>
+        <Filename Value="libnfs.pas"/>
+        <TopLine Value="103"/>
+        <CursorPos X="3" Y="116"/>
+        <UsageCount Value="10"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit5>
-      <Unit6>
-        <Filename Value="C:\lazarus\fpc\3.0.4\source\packages\rtl-objpas\src\inc\dateutil.inc"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="398"/>
-        <CursorPos X="10" Y="409"/>
-        <UsageCount Value="5"/>
-      </Unit6>
     </Units>
-    <JumpHistory Count="13" HistoryIndex="12">
+    <JumpHistory Count="10" HistoryIndex="9">
       <Position1>
-        <Filename Value="ulibzip.pas"/>
-        <Caret Line="248" Column="58" TopLine="235"/>
+        <Filename Value="libnfs.pas"/>
+        <Caret Line="3"/>
       </Position1>
       <Position2>
-        <Filename Value="ulibzip.pas"/>
-        <Caret Line="360" Column="41" TopLine="335"/>
+        <Filename Value="libnfs.pas"/>
+        <Caret Column="9"/>
       </Position2>
       <Position3>
-        <Filename Value="ulibzip.pas"/>
-        <Caret Line="36" Column="86" TopLine="30"/>
+        <Filename Value="unfs.pas"/>
+        <Caret Line="54" Column="49"/>
       </Position3>
       <Position4>
-        <Filename Value="ulibzip.pas"/>
-        <Caret Line="673" Column="42" TopLine="653"/>
+        <Filename Value="unfs.pas"/>
+        <Caret Line="541" Column="49" TopLine="527"/>
       </Position4>
       <Position5>
-        <Filename Value="ulibzip.pas"/>
-        <Caret Line="661" Column="32" TopLine="648"/>
+        <Filename Value="unfs.pas"/>
+        <Caret Line="565" TopLine="546"/>
       </Position5>
       <Position6>
-        <Filename Value="ulibzip.pas"/>
-        <Caret Line="660" Column="43" TopLine="648"/>
+        <Filename Value="unfs.pas"/>
+        <Caret Line="543" Column="50" TopLine="524"/>
       </Position6>
       <Position7>
-        <Filename Value="ulibzip.pas"/>
-        <Caret Line="663" Column="42" TopLine="650"/>
+        <Filename Value="libnfs.pas"/>
+        <Caret Line="233" Column="31" TopLine="220"/>
       </Position7>
       <Position8>
-        <Filename Value="ulibzip.pas"/>
-        <Caret Line="661" Column="26" TopLine="653"/>
+        <Filename Value="unfs.pas"/>
+        <Caret Line="543" Column="50" TopLine="530"/>
       </Position8>
       <Position9>
-        <Filename Value="ulibzip.pas"/>
-        <Caret Line="668" Column="22" TopLine="646"/>
+        <Filename Value="unfs.pas"/>
+        <Caret Line="552" Column="57" TopLine="539"/>
       </Position9>
       <Position10>
-        <Filename Value="libzip.pas"/>
-        <Caret Line="45" TopLine="55"/>
+        <Filename Value="unfs.pas"/>
+        <Caret Line="548" Column="32" TopLine="534"/>
       </Position10>
-      <Position11>
-        <Filename Value="ulibzip.pas"/>
-        <Caret Line="668" Column="29" TopLine="652"/>
-      </Position11>
-      <Position12>
-        <Filename Value="ulibzip.pas"/>
-        <Caret Line="673" Column="7"/>
-      </Position12>
-      <Position13>
-        <Filename Value="ulibzip.pas"/>
-        <Caret Line="674" Column="3" TopLine="652"/>
-      </Position13>
     </JumpHistory>
   </ProjectSession>
 </CONFIG>

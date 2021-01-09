@@ -52,23 +52,19 @@ Function _DeleteFile(FileName: LPCWSTR;var DokanFileInfo: DOKAN_FILE_INFO): NTST
 
 function _DeleteDirectory(FileName: LPCWSTR;var DokanFileInfo: DOKAN_FILE_INFO): NTSTATUS; stdcall;
 
-function _Mount(mount:string):boolean;stdcall;
+function _Mount(rootdirectory:pwidechar):boolean;stdcall;
 function _unMount: ntstatus;stdcall;
 
 implementation
 
 var
   debug:boolean=true;
-  //sock:TTCPBlockSocket;
   sock:tsocket;
   session:PLIBSSH2_SESSION;
-  fingerprint,userauthlist:PAnsiChar;
-  //i:integer;
   tmp:string;
-  host:string='192.168.1.247';
-  username:string='pi';
-  password:string='raspberry';
-  path:string='/home/pi';
+  host:string='';
+  username:string='';
+  password:string='';
   sftp_session:PLIBSSH2_SFTP;
 
 
@@ -150,7 +146,7 @@ log('path:'+path);
          log(strpas(@mem[0])+':'+inttostr(attrs.filesize));
          if ((attrs.flags and LIBSSH2_SFTP_ATTR_SIZE)=LIBSSH2_SFTP_ATTR_SIZE) then
          begin
-         if (attrs.filesize=4096)
+         if (attrs.filesize=4096) //if DokanFileInfo.isdirectory
             then findData.dwFileAttributes := FILE_ATTRIBUTE_DIRECTORY
             else findData.dwFileAttributes := FILE_ATTRIBUTE_NORMAL;
          findData.nFileSizeHigh :=LARGE_INTEGER(attrs.filesize).HighPart;
@@ -298,7 +294,7 @@ begin
        log('bytes read:'+inttostr(ReadLength));
        if ReadLength>0
           then Result := STATUS_SUCCESS
-          else log('libssh2_sftp_read failed');
+          else log('libssh2_sftp_read failed',1);
 
       //end; //while 1=1 do
 
@@ -338,6 +334,8 @@ begin
   path:=stringreplace(path,'\','/',[rfReplaceAll, rfIgnoreCase]);
   if path='/' then begin exit;end;
 
+  log(path);
+
   if DokanFileInfo.Context <>0 then sftp_handle :=pointer(DokanFileInfo.Context);
     if DokanFileInfo.Context =0 then
        begin
@@ -362,7 +360,7 @@ begin
   //windows seems to be smart enough if NumberOfBytesWritten<NumberOfBytesToWrite
   //still we could/should it properly (code below to be reviewed)
   NumberOfBytesWritten :=0;
-  NumberOfBytesWritten := libssh2_sftp_write(sftp_handle, ptr, NumberOfBytesToWrite);
+  NumberOfBytesWritten := libssh2_sftp_write(sftp_handle, @buffer, NumberOfBytesToWrite);
   {
   ptr:=@buffer;
   while NumberOfBytesWritten<NumberOfBytesToWrite do
@@ -378,7 +376,7 @@ begin
 
   if NumberOfBytesWritten>0
      then Result := STATUS_SUCCESS
-     else log('libssh2_sftp_write failed');
+     else log('libssh2_sftp_write failed',1);
 
 
 end;
@@ -398,7 +396,10 @@ begin
   new_path := WideCharToString(NewFileName);
   new_path:=stringreplace(new_path,'\','/',[rfReplaceAll, rfIgnoreCase]);
 
-  result:=STATUS_SUCCESS;
+  log('libssh2_sftp_rename');
+  if libssh2_sftp_rename (sftp_session,pchar(old_path),pchar(new_path ))=0
+     then result:=STATUS_SUCCESS
+     else result:=STATUS_NO_SUCH_FILE ;
 
 
 end;
@@ -426,14 +427,14 @@ path := WideCharToString(filename);
      begin
      log('libssh2_sftp_unlink');
       rc:=libssh2_sftp_unlink(sftp_session ,pchar(path));
-      if rc<>0 then log('libssh2_sftp_unlink failed')
+      if rc<>0 then log('libssh2_sftp_unlink failed',1)
      end
      else
      //is a directory
      begin
      log('libssh2_sftp_rmdir');
      rc:=libssh2_sftp_rmdir(sftp_session ,pchar(path));
-     if rc<>0 then log('libssh2_sftp_rmdir failed')
+     if rc<>0 then log('libssh2_sftp_rmdir failed',1)
      end;//if DokanFileInfo.IsDirectory =false then
    end;//if DokanFileInfo.DeleteOnClose=true then
   end;
@@ -442,7 +443,7 @@ path := WideCharToString(filename);
 procedure _CloseFile(FileName: LPCWSTR;
                           var DokanFileInfo: DOKAN_FILE_INFO); stdcall;
 var
-  filePath: WCHAR_PATH;
+  path:string;
 begin
 
   path := WideCharToString(filename);
@@ -475,12 +476,11 @@ var
   error: DWORD;
   genericDesiredAccess: ACCESS_MASK;
   path:string;
-
+  rc:integer;
 begin
 
   result := STATUS_SUCCESS;
-  //DokanFileInfo.Context :=int64(nfsfh);
-  //we will handle creationDisposition later
+
 
  log('***************************************');
  log('_CreateFile');
@@ -489,7 +489,32 @@ begin
  path:=stringreplace(path,'\','/',[rfReplaceAll, rfIgnoreCase]);
  if path='/' then begin exit;end;
 
+ log(path);
 
+    DokanMapKernelToUserCreateFileFlags(
+      DesiredAccess, FileAttributes, CreateOptions, CreateDisposition,
+      @genericDesiredAccess, @fileAttributesAndFlags, @creationDisposition);
+
+ if (creationDisposition = CREATE_NEW) then
+       begin
+       if DokanFileInfo.IsDirectory =true then
+             begin
+             log('libssh2_sftp_mkdir');
+             rc:=libssh2_sftp_mkdir(sftp_session ,pchar(path),
+                            LIBSSH2_SFTP_S_IRWXU or
+                            LIBSSH2_SFTP_S_IRGRP or LIBSSH2_SFTP_S_IXGRP or
+                            LIBSSH2_SFTP_S_IROTH or LIBSSH2_SFTP_S_IXOTH);
+             if rc<>0 then log('libssh2_sftp_mkdir failed',1)
+             end
+             else//if DokanFileInfo.IsDirectory =true then
+             begin
+             log('libssh2_sftp_open');
+             //DokanFileInfo.Context:=integer(...
+             if libssh2_sftp_open (sftp_session,pchar(path),LIBSSH2_FXF_CREAT,
+                          LIBSSH2_SFTP_S_IRUSR or LIBSSH2_SFTP_S_IWUSR or
+                          LIBSSH2_SFTP_S_IRGRP or LIBSSH2_SFTP_S_IROTH) =nil then log('libssh2_sftp_open failed',1)
+             end; //if DokanFileInfo.IsDirectory =true then
+       end;//if (creationDisposition = CREATE_NEW) then
 
 end;
 
@@ -509,7 +534,7 @@ begin
  log('libssh2_sftp_unlink');
  rc:=libssh2_sftp_unlink(sftp_session ,pchar(path));
  if rc<>0
-    then log('libssh2_sftp_unlink failed')
+    then log('libssh2_sftp_unlink failed',1)
     else result := STATUS_SUCCESS;
 end;
 
@@ -529,7 +554,7 @@ begin
  log('libssh2_sftp_rmdir');
  rc:=libssh2_sftp_rmdir(sftp_session ,pchar(path));
  if rc<>0
-    then log('libssh2_sftp_rmdir failed')
+    then log('libssh2_sftp_rmdir failed',1)
     else result := STATUS_SUCCESS;
 end;
 
@@ -562,18 +587,35 @@ begin
 end;
 
 
-function _Mount(mount:string):boolean;stdcall;
+function _Mount(rootdirectory:pwidechar):boolean;stdcall;
 var
 i:integer;
+fingerprint,userauthlist:PAnsiChar;
+List: TStrings;
 begin
 result:=false;
+
+log ('******** proxy loaded ********',1);
+log('rootdirectory:'+strpas(rootdirectory),1);
+
+List := TStringList.Create;
+ExtractStrings([':'], [], PChar(string(strpas(rootdirectory))), List);
+if list.Count =3 then
+      begin
+      username:=list[0];
+      password:=list[1];
+      host:=list[2];
+      end;
+List.Free;
+
+if host='' then begin log('host is empty',1);exit; end;
 
 if init_socket(sock)=false then raise exception.Create ('sock error');
 
     log('libssh2_init...');
     if libssh2_init(0)<>0 then
       begin
-      writeln('Cannot libssh2_init');
+      log('Cannot libssh2_init',1);
       exit;
       end;
     { /* Create a session instance and start it up. This will trade welcome

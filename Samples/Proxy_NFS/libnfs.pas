@@ -1,3 +1,7 @@
+{$ifdef fpc}
+{$mode delphi}
+{$endif}
+
 unit libnfs;
 //mostly inspired by this header : https://github.com/sahlberg/libnfs/blob/master/include/nfsc/libnfs.h
 
@@ -110,7 +114,7 @@ var
   nfs_parse_url_full:function(nfs:pointer;url:pchar):pointer;cdecl;
   nfs_destroy_url:procedure(nfsurl:pointer);cdecl;
   nfs_get_error:function(nfs:pointer):pchar;cdecl;
-  nfs_mount:function(nfs:pointer;server:pchar;exportname:pchar):integer; cdecl;
+  nfs_mount:function(nfs:pointer;server:pchar;exportname:pchar):integer; cdecl=nil;
   //file
   nfs_creat:function(nfs:pointer; path:pchar;mode:integer;nfsfh:ppointer):integer; cdecl;
   nfs_open:function(nfs:pointer;path:pchar;flags:integer;nfsfh:ppointer):integer; cdecl;
@@ -141,7 +145,7 @@ var
   mount_free_export_list:procedure(exports_:pointer);cdecl;
   //With ftruncate(), the file must be open for writing; with truncate(), the file must be writable.
   nfs_truncate:function(nfs:pointer; path:pchar;length:int64):integer; cdecl;
-  //
+  //
   nfs_set_uid:function(nfs:pointer;uid:integer):integer; cdecl;
   nfs_set_gid:function(nfs:pointer;gid:integer):integer; cdecl;
   //
@@ -225,7 +229,8 @@ WSAStartup(MAKEWORD(2,2), wsaData);
 @nfs_set_version:=GetProcAddress(fLibHandle,'nfs_set_version');
 @nfs_unlink:=GetProcAddress(fLibHandle,'nfs_unlink');
 
-
+//writeln('lib_init');
+//writeln(nativeuint(@nfs_mount));
 
 //
 end;

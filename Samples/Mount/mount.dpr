@@ -211,7 +211,7 @@ var
   _DeleteFile:TDokanDeleteFile=nil;
   _DeleteDirectory:TDokanDeleteDirectory=nil;
   _unmount:function():NTSTATUS ; stdcall=nil;
-  _mount:function(param:string):boolean;stdcall=nil;
+  _mount:function(param:pwidechar):boolean;stdcall=nil;
 
 procedure DbgPrint(format: string; const args: array of const); overload;
 var
@@ -879,7 +879,7 @@ begin
       end;
       'R': begin
         Inc(command);
-        lstrcpynW(RootDirectory, PWideChar(WideString(argv[command])), DOKAN_MAX_PATH);
+        lstrcpynW(@RootDirectory[0], PWideChar(WideString(argv[command])), DOKAN_MAX_PATH);
         DbgPrint('RootDirectory: %s\n', [RootDirectory]);
       end;
       'L': begin
@@ -1009,6 +1009,9 @@ begin
 
   dokanOptions^.Options := dokanOptions^.Options or DOKAN_OPTION_ALT_STREAM;
 
+  writeln('DokanVersion:'+inttostr(DokanVersion));
+  writeln('DokanDriverVersion:'+inttostr(DokanDriverVersion));
+
   if proxy<>'' then
     begin
     writeln('checking proxy; in progress');
@@ -1031,7 +1034,7 @@ begin
     @_GetFileInformation:=GetProcAddress(fLibHandle,'_GetFileInformation');
     if not assigned(_GetFileInformation) then writeln('_GetFileInformation not ok');
     @_unmount:=GetProcAddress(fLibHandle,'_unMount');
-    if not assigned(_unmount) then writeln('_mount not ok');
+    if not assigned(_unmount) then writeln('_unmount not ok');
     @_mount:=GetProcAddress(fLibHandle,'_Mount');
     if not assigned(_mount) then writeln('_mount not ok');
     @_Cleanup:=GetProcAddress(fLibHandle,'_Cleanup');
@@ -1081,8 +1084,9 @@ begin
   dokanOperations^.Mounted := onMounted;
 
   //create filesyste ressources
-  write('Mounting...');
-  if _mount(WideCharToString(RootDirectory))=false then
+  writeln('Mounting...');
+  writeln('RootDirectory:'+WideCharToString(@RootDirectory[0]));
+  if _mount((@RootDirectory[0]))=false then
     begin
     Dispose(dokanOptions);
     Dispose(dokanOperations);
@@ -1141,10 +1145,12 @@ writeln(extractfilename('\filename'));
 }
   IsMultiThread := True;
 
+  {
   lstrcpyW(RootDirectory, 'nfs://192.168.1.248/volume2/public/');
   lstrcpyW(MountPoint, 'X:\');
   lstrcpyW(UNCName, '');
-
+  }
+  
   argc := 1 + ParamCount();
   SetLength(argv, argc);
   for i := 0 to argc - 1 do

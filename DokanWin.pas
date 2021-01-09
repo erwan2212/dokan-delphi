@@ -4,7 +4,7 @@ unit DokanWin;
   {$mode delphi}
 {$endif FPC}
 
-{$align 8}
+{$ALIGN 8}
 {$minenumsize 4}
 
 interface

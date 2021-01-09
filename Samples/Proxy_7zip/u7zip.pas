@@ -32,7 +32,7 @@ function _ReadFile(FileName: LPCWSTR; var Buffer;
                         Offset: LONGLONG;
                         var DokanFileInfo: DOKAN_FILE_INFO): NTSTATUS; stdcall;
 
-function _Mount(filename:string):boolean; stdcall;
+function _Mount(param:pwidechar):boolean; stdcall;
 function _unMount:NTSTATUS; stdcall;
 
 implementation
@@ -395,13 +395,17 @@ except
 end; //temp hack to avoid badvarianttype error...
 end;
 
-function _Mount(filename:string):boolean; stdcall;
+function _Mount(param:pwidechar):boolean; stdcall;
 var
 ext:string;
 begin
 result:=false;
+//
+writeln('******** proxy loaded ********');
+writeln('rootdirectory:'+string(widechartostring(param)));
+//
 guid:=StringToGUID ('{00000000-0000-0000-0000-000000000000}');
-ext:=ExtractFileExt(filename);
+ext:=ExtractFileExt(string(widechartostring(param)));
 if lowercase(ext)='.iso' then guid:=CLSID_CFormatiso;
 if lowercase(ext)='.wim' then guid:=CLSID_CFormatWim;
 //  guid:=CLSID_CFormatUdf;
@@ -433,7 +437,7 @@ if GUIDToString(guid)='{00000000-0000-0000-0000-000000000000}' then
   writeln('unknown archive');
   exit;
   end;
-archive:=filename;  
+archive:=string(widechartostring(param));
 result:=true;
 end;
 

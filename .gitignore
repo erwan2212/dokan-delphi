@@ -9,3 +9,5 @@
 *.ppu
 Samples/Mount/mount.exe
 Samples/Mount/test.zip
+lib/
+*.dbg

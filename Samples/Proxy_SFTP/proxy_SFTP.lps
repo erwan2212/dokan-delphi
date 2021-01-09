@@ -8,175 +8,174 @@
       <Unit0>
         <Filename Value="proxy_SFTP.lpr"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <TopLine Value="11"/>
-        <CursorPos X="46" Y="24"/>
-        <UsageCount Value="20"/>
+        <CursorPos Y="38"/>
+        <UsageCount Value="101"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
         <Filename Value="usftp.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="401"/>
-        <CursorPos X="13" Y="421"/>
-        <UsageCount Value="20"/>
+        <TopLine Value="588"/>
+        <CursorPos X="73" Y="608"/>
+        <UsageCount Value="101"/>
         <Loaded Value="True"/>
       </Unit1>
       <Unit2>
         <Filename Value="..\..\Dokan.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="309"/>
-        <CursorPos X="20" Y="324"/>
-        <UsageCount Value="20"/>
-        <Loaded Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="359"/>
+        <CursorPos X="21" Y="375"/>
+        <UsageCount Value="101"/>
       </Unit2>
       <Unit3>
         <Filename Value="..\..\DokanWin.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="213"/>
-        <CursorPos X="86" Y="10"/>
-        <UsageCount Value="20"/>
+        <TopLine Value="216"/>
+        <CursorPos X="14" Y="240"/>
+        <UsageCount Value="101"/>
       </Unit3>
       <Unit4>
         <Filename Value="..\..\..\ssh-fpc\libssh2_sftp.pas"/>
-        <EditorIndex Value="4"/>
-        <TopLine Value="493"/>
-        <CursorPos X="29" Y="511"/>
-        <UsageCount Value="10"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="223"/>
+        <CursorPos X="18" Y="175"/>
+        <UsageCount Value="51"/>
         <Loaded Value="True"/>
       </Unit4>
       <Unit5>
         <Filename Value="..\..\..\ssh-fpc\libssh2.pas"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="2"/>
         <TopLine Value="492"/>
         <CursorPos X="3" Y="506"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="51"/>
         <Loaded Value="True"/>
       </Unit5>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="usftp.pas"/>
-        <Caret Line="356" Column="35" TopLine="344"/>
+        <Filename Value="..\..\..\ssh-fpc\libssh2_sftp.pas"/>
+        <Caret Line="434" Column="32" TopLine="410"/>
       </Position1>
       <Position2>
         <Filename Value="..\..\..\ssh-fpc\libssh2_sftp.pas"/>
-        <Caret Line="5" Column="60"/>
+        <Caret Line="454" Column="29" TopLine="430"/>
       </Position2>
       <Position3>
-        <Filename Value="usftp.pas"/>
-        <Caret Line="473" TopLine="455"/>
+        <Filename Value="..\..\..\ssh-fpc\libssh2_sftp.pas"/>
+        <Caret Line="460" Column="30" TopLine="436"/>
       </Position3>
       <Position4>
-        <Filename Value="usftp.pas"/>
-        <Caret Line="50" Column="21" TopLine="36"/>
+        <Filename Value="..\..\..\ssh-fpc\libssh2_sftp.pas"/>
+        <Caret Line="8" Column="67"/>
       </Position4>
       <Position5>
-        <Filename Value="proxy_SFTP.lpr"/>
-        <Caret Line="34" Column="16" TopLine="11"/>
+        <Filename Value="..\..\..\ssh-fpc\libssh2_sftp.pas"/>
+        <Caret Line="5" Column="70"/>
       </Position5>
       <Position6>
         <Filename Value="usftp.pas"/>
-        <Caret Line="473" Column="16" TopLine="454"/>
+        <Caret Line="512" Column="72" TopLine="488"/>
       </Position6>
       <Position7>
-        <Filename Value="..\..\..\ssh-fpc\libssh2_sftp.pas"/>
-        <Caret Line="454" Column="29" TopLine="438"/>
+        <Filename Value="usftp.pas"/>
+        <Caret Line="510" Column="44" TopLine="493"/>
       </Position7>
       <Position8>
         <Filename Value="usftp.pas"/>
-        <Caret Line="477" Column="22" TopLine="463"/>
+        <Caret Line="386" Column="10" TopLine="378"/>
       </Position8>
       <Position9>
-        <Filename Value="..\..\Dokan.pas"/>
-        <Caret Line="109" Column="27" TopLine="101"/>
+        <Filename Value="usftp.pas"/>
+        <Caret Line="267" Column="27" TopLine="255"/>
       </Position9>
       <Position10>
-        <Filename Value="..\..\Dokan.pas"/>
-        <Caret Line="120" Column="16" TopLine="101"/>
+        <Filename Value="usftp.pas"/>
+        <Caret Line="510" TopLine="493"/>
       </Position10>
       <Position11>
-        <Filename Value="..\..\Dokan.pas"/>
-        <Caret Line="224" Column="24" TopLine="200"/>
+        <Filename Value="usftp.pas"/>
+        <Caret Line="5" Column="86"/>
       </Position11>
       <Position12>
         <Filename Value="usftp.pas"/>
-        <Caret Line="10" Column="13"/>
+        <Caret Line="272" Column="36" TopLine="249"/>
       </Position12>
       <Position13>
         <Filename Value="usftp.pas"/>
-        <Caret Line="63" Column="16" TopLine="48"/>
+        <Caret Line="512" Column="73" TopLine="496"/>
       </Position13>
       <Position14>
         <Filename Value="usftp.pas"/>
-        <Caret Line="534" Column="32" TopLine="520"/>
+        <Caret Line="401" Column="27" TopLine="394"/>
       </Position14>
       <Position15>
         <Filename Value="usftp.pas"/>
-        <Caret Line="553" Column="45" TopLine="540"/>
+        <Caret Line="341" Column="13" TopLine="326"/>
       </Position15>
       <Position16>
         <Filename Value="usftp.pas"/>
-        <Caret Line="492" Column="24" TopLine="474"/>
+        <Caret Line="507" Column="30" TopLine="492"/>
       </Position16>
       <Position17>
         <Filename Value="usftp.pas"/>
-        <Caret Line="335" Column="30" TopLine="320"/>
+        <Caret Line="513" Column="42" TopLine="497"/>
       </Position17>
       <Position18>
-        <Filename Value="proxy_SFTP.lpr"/>
-        <Caret Line="34" Column="16" TopLine="11"/>
+        <Filename Value="usftp.pas"/>
+        <Caret Line="309" Column="10" TopLine="331"/>
       </Position18>
       <Position19>
         <Filename Value="usftp.pas"/>
-        <Caret Line="51" Column="10" TopLine="37"/>
+        <Caret Line="462" Column="27" TopLine="439"/>
       </Position19>
       <Position20>
         <Filename Value="usftp.pas"/>
-        <Caret Line="428" Column="55" TopLine="417"/>
+        <Caret Line="370" Column="41" TopLine="354"/>
       </Position20>
       <Position21>
         <Filename Value="usftp.pas"/>
-        <Caret Line="503" Column="16" TopLine="488"/>
+        <Caret Line="367" Column="65" TopLine="353"/>
       </Position21>
       <Position22>
         <Filename Value="usftp.pas"/>
-        <Caret Line="410" Column="17" TopLine="399"/>
+        <Caret Line="238" Column="10" TopLine="272"/>
       </Position22>
       <Position23>
         <Filename Value="usftp.pas"/>
-        <Caret Line="428" TopLine="413"/>
+        <Caret Line="6" Column="41"/>
       </Position23>
       <Position24>
         <Filename Value="usftp.pas"/>
-        <Caret Line="432" Column="6" TopLine="419"/>
+        <Caret Line="89" Column="15" TopLine="65"/>
       </Position24>
       <Position25>
         <Filename Value="usftp.pas"/>
-        <Caret Line="438" Column="46" TopLine="419"/>
+        <Caret Line="211" Column="12" TopLine="188"/>
       </Position25>
       <Position26>
         <Filename Value="usftp.pas"/>
-        <Caret Line="432" TopLine="419"/>
+        <Caret Line="71" Column="5" TopLine="52"/>
       </Position26>
       <Position27>
-        <Filename Value="proxy_SFTP.lpr"/>
-        <Caret Line="33" Column="14" TopLine="11"/>
+        <Filename Value="usftp.pas"/>
+        <Caret Line="450" Column="14" TopLine="439"/>
       </Position27>
       <Position28>
         <Filename Value="usftp.pas"/>
-        <Caret Line="435" TopLine="423"/>
+        <Caret Line="64" Column="40" TopLine="49"/>
       </Position28>
       <Position29>
         <Filename Value="usftp.pas"/>
-        <Caret Line="436" TopLine="419"/>
+        <Caret Line="600" Column="38" TopLine="581"/>
       </Position29>
       <Position30>
         <Filename Value="usftp.pas"/>
-        <Caret Line="421" Column="13" TopLine="401"/>
+        <Caret Line="67" Column="5" TopLine="51"/>
       </Position30>
     </JumpHistory>
   </ProjectSession>

@@ -1,0 +1,8 @@
+DokanVersion:122
+DokanDriverVersion:400
+connection string:
+checking proxy; in progress
+_DeleteFile not ok
+_DeleteDirectory not ok
+checking proxy: done
+Mounting...

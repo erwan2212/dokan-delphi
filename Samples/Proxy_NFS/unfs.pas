@@ -46,8 +46,8 @@ function _CreateFile(FileName: LPCWSTR; var SecurityContext: DOKAN_IO_SECURITY_C
                  ShareAccess: ULONG; CreateDisposition: ULONG;
                  CreateOptions: ULONG; var DokanFileInfo: DOKAN_FILE_INFO): NTSTATUS; stdcall;                        
 
-function _Mount(mount:string):boolean;stdcall
-function _unMount: ntstatus;stdcall
+function _Mount(param:pwidechar):boolean;stdcall;
+function _unMount: ntstatus;stdcall;
 function _Discover(items:tstrings):boolean;stdcall;
 
 implementation
@@ -531,22 +531,28 @@ end;
 
 
 
-function _Mount(mount:string):boolean;stdcall
+function _Mount(param:pwidechar):boolean;stdcall;
 var
   url: pnfs_url;
 begin
 result:=false;
 
+writeln('******* proxy loaded ********');
+writeln('rootdirectory:'+widechartostring(param));
+
 if libnfs.fLibHandle =thandle(-1) then lib_init;
+
 
 if nfs=nil then nfs:=nfs_init_context;
 url:=nil;
-url:=nfs_parse_url_full (nfs,pchar(mount));
+
+url:=nfs_parse_url_full (nfs,pchar(string(widechartostring(param))));
 if url=nil  then
   begin
-  writeln(strpas( nfs_get_error(nfs)));
+  writeln('nfs_parse_url_full:'+strpas( nfs_get_error(nfs)));
   exit;
   end;
+
 //try root ?
 try
 //nfs_set_uid(nfs, 0);
@@ -559,8 +565,9 @@ if nfs_mount(nfs,url^.server , url^.path )<>0 then
   writeln(strpas( nfs_get_error(nfs)));
   nfs_destroy_url(url);
   exit;
-  end;
+  end else writeln('nfs_mount ok');
 nfs_destroy_url(url);
+
 //
 //writeln('readmax:'+inttostr(nfs_get_readmax(nfs)));
 //writeln('writemax:'+inttostr(nfs_get_writemax(nfs)));
@@ -569,7 +576,7 @@ nfs_destroy_url(url);
   Result := true;
 end;
 
-function _unMount: ntstatus;stdcall
+function _unMount: ntstatus;stdcall;
 begin
   if nfs<>nil then nfs_destroy_context(nfs);
   lib_free;

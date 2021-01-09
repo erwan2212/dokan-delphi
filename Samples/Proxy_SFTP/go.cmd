@@ -1,0 +1,1 @@
+mount.exe /R pi:raspberry:192.168.1.247 /l x /x proxy_SFTP.dll

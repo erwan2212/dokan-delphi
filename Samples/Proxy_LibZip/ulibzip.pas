@@ -38,7 +38,7 @@ procedure _Cleanup(FileName: LPCWSTR;var DokanFileInfo: DOKAN_FILE_INFO); stdcal
 function _DeleteFile(FileName: LPCWSTR; var DokanFileInfo: DOKAN_FILE_INFO): NTSTATUS; stdcall;
 function _DeleteDirectory(FileName: LPCWSTR; var DokanFileInfo: DOKAN_FILE_INFO): NTSTATUS; stdcall;
 
-function _Mount(filename:string):boolean; stdcall;
+function _Mount(param:pwidechar):boolean; stdcall;
 function _unMount:NTSTATUS; stdcall;
 
 implementation
@@ -643,7 +643,7 @@ on e:exception do writeln('_unMount:'+e.message);
 end;
 end;
 
-function _Mount(filename:string):boolean; stdcall;
+function _Mount(param:pwidechar):boolean; stdcall;
 var
 err:integer;
 begin
@@ -657,15 +657,21 @@ writeln('extractfiledir:'+extractfiledir('folderone\test.txt'));
 exit;
 }
 //
-zipfile :=filename;
+writeln('******** proxy loaded ********');
+writeln('rootdirectory:'+string(widechartostring(param)));
+//
+zipfile :=string(widechartostring(param));
 init;
-//writeln(filename);
+
 //
 try
-arch:=zip_open(pchar(filename),0,@err);
+arch:=zip_open(pchar(zipfile),0,@err);
 if arch=nil then
-  begin writeln('_Mount:'+inttostr(err));exit;end;
-  //else writeln('zip_open OK');
+  begin
+  writeln('_Mount:'+inttostr(err));
+  exit;
+  end
+  else writeln('zip_open OK');
   result:=true;
 except
 on e:exception do writeln('_unMount:'+e.message);

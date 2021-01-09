@@ -1,0 +1,1 @@
+mount /r "nfs://192.168.1.248/volume2/download/" /l x /x proxy_NFS.dll
