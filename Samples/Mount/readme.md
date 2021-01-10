@@ -2,7 +2,8 @@ Create your own filesystem and mount it as either a logical drive or folder.
 Dokan (https://github.com/dokan-dev/dokany) <br/>
 
 
-Dokan is built against VC 2017 (you need the VC2017 runtime - see installation.txt).<br/>
+Install Dokan from here : https://github.com/dokan-dev/dokany/releases.<br/>
+Safest path is to go for the noVC.msi package.<br/>
 
 Below a simple command line to mount a zip archive on X:<br/>
 mount.exe /r test.zip /l x /x proxy_7zip.dll <br/>
