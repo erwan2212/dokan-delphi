@@ -46,14 +46,17 @@
       <Unit0>
         <Filename Value="proxy_NFS.dpr"/>
         <IsPartOfProject Value="True"/>
+        <EditorIndex Value="1"/>
         <UsageCount Value="20"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit0>
       <Unit1>
         <Filename Value="unfs.pas"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <CursorPos X="19" Y="8"/>
+        <TopLine Value="43"/>
+        <CursorPos X="34" Y="60"/>
         <UsageCount Value="20"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>

@@ -41,6 +41,13 @@ var
 arch:i7zInArchive;
 guid:tguid;
 archive:string;
+debug:boolean=false;
+
+procedure log(msg:string;level:byte=0);
+begin
+  if (level=0) and (debug=false) then exit;
+  {$i-}writeln(msg);{$i+}
+end;
 
 procedure DbgPrint(format: string; const args: array of const); overload;
 begin
@@ -170,7 +177,7 @@ begin
       findData.ftLastWriteTime   :=pv.filetime;
       //if vartype(v)=64 then  findData.ftLastWriteTime   :=_filetime(TvarData( V ).VInt64); //WriteFiletime(TvarData( V ).VInt64);
       except
-      on e:exception do writeln('_FindFiles:'+e.message);
+      on e:exception do log('_FindFiles:'+e.message,1);
       end;
 
       //check varcast
@@ -186,7 +193,7 @@ begin
 
 
 except
- on e:exception do writeln(e.Message );
+ on e:exception do log(e.Message,1 );
 end;
 
 end;
@@ -207,7 +214,7 @@ break;
 end; //if arch.ItemPath [i]=filename then
 end; //for i := 0 to arch.NumberOfItems - 1 do
 except
-on e:exception do writeln(e.message);
+on e:exception do log(e.message,1);
 end;
 
 end;
@@ -222,7 +229,7 @@ stream:tmemorystream; //tstream does not have a seek function
 i:integer;
 begin
 if WideCharToString(filename)='\' then exit;
-writeln('_ReadFile:'+FileName+' '+inttostr(BufferLength)+'@'+inttostr(Offset));
+log('_ReadFile:'+FileName+' '+inttostr(BufferLength)+'@'+inttostr(Offset));
 //writeln(DokanFileInfo.context); //later ...
 if arch=nil then exit;
 i:=filename_to_index(filename);
@@ -236,7 +243,7 @@ ReadLength:=stream.read(buffer,BufferLength);
 stream.free;
 Result := STATUS_SUCCESS;
 except
-on e:exception do writeln('_ReadFile:'+e.message);
+on e:exception do log('_ReadFile:'+e.message,1);
 end;
 
 end;
@@ -285,7 +292,7 @@ if arch=nil then exit;
 i:=filename_to_index(WideCharToString(filename));
 if i=-1 then
   begin
-  writeln('_GetFileInformation:'+filename+ ' no such file');
+  log('_GetFileInformation:'+filename+ ' no such file',1);
   exit;
   end;
 
@@ -318,7 +325,7 @@ try
 
   Result := STATUS_SUCCESS;
   except
-  on e:exception do writeln(e.message);
+  on e:exception do log(e.message,1);
   end;
 
   end;
@@ -347,7 +354,7 @@ DokanMapKernelToUserCreateFileFlags(
 i:=filename_to_index(path);
 if i=-1 then
   begin
-  writeln('_CreateFile:'+filename+ ' no such file');
+  log('_CreateFile:'+filename+ ' no such file',1);
   //this is needed so that files can execute
   if creationDisposition = CREATE_NEW
     then result := STATUS_SUCCESS
@@ -401,8 +408,8 @@ ext:string;
 begin
 result:=false;
 //
-writeln('******** proxy loaded ********');
-writeln('rootdirectory:'+string(widechartostring(param)));
+log('******** proxy loaded ********',1);
+log('rootdirectory:'+string(widechartostring(param)),1);
 //
 guid:=StringToGUID ('{00000000-0000-0000-0000-000000000000}');
 ext:=ExtractFileExt(string(widechartostring(param)));
@@ -434,7 +441,7 @@ if lowercase(ext)='.xz' then guid:=CLSID_CFormatxz;
 
 if GUIDToString(guid)='{00000000-0000-0000-0000-000000000000}' then
   begin
-  writeln('unknown archive');
+  log('unknown archive',1);
   exit;
   end;
 archive:=string(widechartostring(param));

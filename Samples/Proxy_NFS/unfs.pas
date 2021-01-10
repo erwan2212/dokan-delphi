@@ -52,6 +52,9 @@ function _Discover(items:tstrings):boolean;stdcall;
 
 implementation
 
+var
+  debug:boolean=false;
+
 const
 	DOKAN_MAX_PATH = MAX_PATH;
 
@@ -61,6 +64,12 @@ type
 function UNIXTimeToDateTimeFAST(UnixTime: LongWord): TDateTime;
 begin
 Result := (UnixTime / 86400) + 25569;
+end;
+
+procedure log(msg:string;level:byte=0);
+begin
+  if (level=0) and (debug=false) then exit;
+  {$i-}writeln(msg);{$i+}
 end;
 
 procedure DbgPrint(format: string; const args: array of const); overload;
@@ -179,7 +188,7 @@ path:=stringreplace(path,'\','/',[rfReplaceAll, rfIgnoreCase]);
 
   if nfs_stat64(nfs,pchar(path),@stat)<>0 then
   begin
-  writeln(strpas( nfs_get_error(nfs)));
+  log(strpas( nfs_get_error(nfs)),1);
   exit;
   end
   else
@@ -236,7 +245,7 @@ begin
   if DokanFileInfo.Context =0 then
     if nfs_open (nfs,pchar(path) ,O_RDONLY ,@nfsfh)<>0  then
       begin
-      writeln(strpas( nfs_get_error(nfs)));
+      log(strpas( nfs_get_error(nfs)),1);
       exit;
       end;
   if DokanFileInfo.Context =0 then
@@ -251,7 +260,7 @@ begin
 ReadLength := nfs_pread(nfs, nfsfh, Offset,BufferLength , @buffer);
 if ReadLength<0 then
   begin
-  writeln(strpas( nfs_get_error(nfs)));
+  log(strpas( nfs_get_error(nfs)),1);
   //nfs_close(nfs, nfsfh);
   exit;
   end;
@@ -292,7 +301,7 @@ begin
   if DokanFileInfo.Context =0 then
     if nfs_open (nfs,pchar(path) ,O_RDWR or O_TRUNC or O_APPEND   ,@nfsfh)<>0  then
       begin
-      writeln(strpas( nfs_get_error(nfs)));
+      log(strpas( nfs_get_error(nfs)),1);
       exit;
       end;
   //lets store the handle, or rather pointer..., to our file
@@ -301,7 +310,7 @@ begin
     DokanFileInfo.Context:=integer(nfsfh);
     if nfs_truncate (nfs,pchar(path),0)<>0 then
       begin
-      writeln(strpas( nfs_get_error(nfs)));
+      log(strpas( nfs_get_error(nfs)),1);
       end;//
     end;
 //
@@ -310,7 +319,7 @@ begin
 NumberOfBytesWritten := nfs_pwrite(nfs, nfsfh, Offset,NumberOfBytesToWrite , @buffer);
 if NumberOfBytesWritten<0 then
   begin
-  writeln(strpas( nfs_get_error(nfs)));
+  log(strpas( nfs_get_error(nfs)),1);
   //nfs_close(nfs, nfsfh);
   exit;
   end;
@@ -335,7 +344,7 @@ begin
   new_path:=stringreplace(new_path,'\','/',[rfReplaceAll, rfIgnoreCase]);
   if nfs_rename (nfs,pchar(old_path),pchar(new_path))<>0 then
   begin
-  writeln(strpas( nfs_get_error(nfs)));
+  log(strpas( nfs_get_error(nfs)),1);
   end
   else result:=STATUS_SUCCESS;
 
@@ -362,7 +371,7 @@ if DokanFileInfo.DeleteOnClose=true then
     nfs_chdir (nfs,'/');
     if nfs_unlink (nfs,pchar(path))<>0 then
     begin
-    writeln('Cleanup:'+strpas( nfs_get_error(nfs)));
+    log('Cleanup:'+strpas( nfs_get_error(nfs)),1);
     exit;
     end;
     end
@@ -373,7 +382,7 @@ if DokanFileInfo.DeleteOnClose=true then
     nfs_chdir (nfs,'/');
     if nfs_rmdir (nfs,pchar(path))<>0 then
     begin
-    writeln('Cleanup:'+strpas( nfs_get_error(nfs)));
+    log('Cleanup:'+strpas( nfs_get_error(nfs)),1);
     exit;
     end;
     end;
@@ -396,7 +405,7 @@ if DokanFileInfo.Context<>0 then
   if DokanFileInfo.Context <>0
   then nfs_close (nfs,pointer(DokanFileInfo.Context ));
   except
-  on e:exception do writeln(e.message);
+  on e:exception do log(e.message,1);
   end;
   DokanFileInfo.Context := 0;
   end;
@@ -491,7 +500,7 @@ if (DokanFileInfo.IsDirectory) then
         //system.Delete(path,1,1);
         if nfs_mkdir (nfs,pchar(path))<>0 then
         begin
-        writeln(strpas( nfs_get_error(nfs)));
+        log(strpas( nfs_get_error(nfs)),1);
         error:=ERROR_ALREADY_EXISTS;
         // Fail to create folder for OPEN_ALWAYS is not an error
         if (error <> ERROR_ALREADY_EXISTS) or
@@ -520,7 +529,7 @@ if (DokanFileInfo.IsDirectory) then
     begin
     if nfs_creat (nfs,pchar(path),O_CREAT or O_RDWR,@nfsfh)<>0 then
       begin
-      writeln(strpas( nfs_get_error(nfs)));
+      log(strpas( nfs_get_error(nfs)),1);
       end
       else result := STATUS_SUCCESS;
     if nfs_close(nfs, nfsfh)<>0 then ;
@@ -537,8 +546,8 @@ var
 begin
 result:=false;
 
-writeln('******* proxy loaded ********');
-writeln('rootdirectory:'+widechartostring(param));
+log('******* proxy loaded ********',1);
+log('rootdirectory:'+widechartostring(param),1);
 
 if libnfs.fLibHandle =thandle(-1) then lib_init;
 
@@ -549,7 +558,7 @@ url:=nil;
 url:=nfs_parse_url_full (nfs,pchar(string(widechartostring(param))));
 if url=nil  then
   begin
-  writeln('nfs_parse_url_full:'+strpas( nfs_get_error(nfs)));
+  log('nfs_parse_url_full:'+strpas( nfs_get_error(nfs)),1);
   exit;
   end;
 
@@ -562,10 +571,10 @@ end;
 
 if nfs_mount(nfs,url^.server , url^.path )<>0 then
   begin
-  writeln(strpas( nfs_get_error(nfs)));
+  log(strpas( nfs_get_error(nfs)),1);
   nfs_destroy_url(url);
   exit;
-  end else writeln('nfs_mount ok');
+  end else log('nfs_mount ok',1);
 nfs_destroy_url(url);
 
 //

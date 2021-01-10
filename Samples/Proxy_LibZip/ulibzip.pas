@@ -45,6 +45,13 @@ implementation
 
 var
 dw:dword;
+debug:boolean=false;
+
+procedure log(msg:string;level:byte=0);
+begin
+  if (level=0) and (debug=false) then exit;
+  {$i-}writeln(msg);{$i+}
+end;
 
 procedure DbgPrint(format: string; const args: array of const); overload;
 begin
@@ -110,7 +117,7 @@ begin
    arch:=zip_open(pchar(zipfile),0,@err);
    if (arch=nil) or (err<>0) then
     begin
-    writeln('zip_open failed:'+inttostr(err));
+    log('zip_open failed:'+inttostr(err),1);
     result:=false;
     end
     else result:=true;
@@ -160,7 +167,7 @@ temp:string;
 widetemp:widestring;
 
 begin
-writeln('_FindFiles:'+FileName);
+log('_FindFiles:'+FileName);
  try
  //the below should/could take place in the _open function
  if arch=nil then exit;
@@ -216,7 +223,7 @@ writeln('_FindFiles:'+FileName);
 
 
 except
- on e:exception do writeln(e.Message );
+ on e:exception do log(e.Message,1 );
 end;
 
 end;
@@ -251,7 +258,7 @@ path:string;
 begin
 path := WideCharToString(filename);
 if arch=nil then exit;
-writeln('_ReadFile:'+path+' '+inttostr(BufferLength)+'@'+inttostr(Offset));
+log('_ReadFile:'+path+' '+inttostr(BufferLength)+'@'+inttostr(Offset));
 
 if path[1]='\' then system.delete(path,1,1);
 i:=DokanFileInfo.context-1;
@@ -263,7 +270,7 @@ file_:=nil;
 file_:=zip_fopen_index(arch,i,0);
 if file_=nil then
    begin
-   writeln('zip_fopen_index failed');
+   log('zip_fopen_index failed',1);
    exit;
    end;
 //cheap way to implement seek - we small implement small chunks of buffer
@@ -281,7 +288,7 @@ zip_fclose (file_);
 //
 Result := STATUS_SUCCESS;
 except
-on e:exception do writeln('_ReadFile:'+e.message);
+on e:exception do log('_ReadFile:'+e.message,1);
 end;
 
 end;
@@ -301,13 +308,13 @@ var
 begin
 path := WideCharToString(filename);
 if arch=nil then exit;
-writeln('_WriteFile: '+ path+' '+inttostr(NumberOfBytesToWrite)+'@'+inttostr(Offset) );
+log('_WriteFile: '+ path+' '+inttostr(NumberOfBytesToWrite)+'@'+inttostr(Offset) );
 
 i:=DokanFileInfo.context-1;
 //if i=-1 then i:=zip_name_locate(arch,pchar(path),0);
 if i=-1 then
   begin
-  writeln('file without a context');
+  log('file without a context');
   //exit; //we need to handle creation/addition of new files
   end;
 
@@ -323,15 +330,15 @@ if i=-1 then
   if source<>nil then
     begin
     if zip_file_add (arch,pchar(ExtractFileName(path)),source,0)=-1
-       then writeln('zip_file_add failed')
+       then log('zip_file_add failed',1)
        else
        begin
-       writeln('zip_file_add OK');
+       log('zip_file_add OK');
        _refresh;
        end;
     //zip_source_free(source); //done by zip_file_add
     end
-    else writeln('source=nil');
+    else log('source=nil',1);
   end;
 
 
@@ -407,7 +414,7 @@ i:integer;
 begin
 path := WideCharToString(filename);
 if path='\' then exit; //nothing to do.
-writeln('_Cleanup:'+path+ ' '+inttostr(DokanFileInfo.context));
+log('_Cleanup:'+path+ ' '+inttostr(DokanFileInfo.context));
 if arch=nil then exit;
 i:=DokanFileInfo.context-1;
 //
@@ -426,14 +433,14 @@ if fileexists(GetTempDir+'\'+path) then
   if source<>nil
     //then if zip_file_replace (arch,DokanFileInfo.context-1,source,0)=-1
     then if zip_file_add  (arch,pchar(ExtractFileName(path)),source,ZIP_FL_OVERWRITE)=-1
-      then writeln('zip_file_replace failed')
+      then log('zip_file_replace failed',1)
       else
       begin
-      writeln('zip_file_replace OK');
+      log('zip_file_replace OK');
       _refresh;
       end;
 
-  if source=nil then writeln('source=nil');
+  if source=nil then log('source=nil',1);
   {$i-}deletefile(GetTempDir+'\'+path);{$i-};
   end;
 //
@@ -445,10 +452,10 @@ if fileexists(GetTempDir+'\'+path) then
     if DokanFileInfo.IsDirectory =false then
          begin
          if zip_delete (arch,int64(i) )=-1
-           then writeln('zip_delete failed')
+           then log('zip_delete failed',1)
            else
            begin
-           writeln('file has been deleted');
+           log('file has been deleted');
            _refresh;
            end;//if zip_delete....
          end
@@ -467,7 +474,7 @@ function _DeleteFile(FileName: LPCWSTR; var DokanFileInfo: DOKAN_FILE_INFO): NTS
 begin
   result:=STATUS_NO_SUCH_FILE;
   path := WideCharToString(filename);
-  writeln('_DeleteFile:'+path+ ' '+inttostr(DokanFileInfo.context));
+  log('_DeleteFile:'+path+ ' '+inttostr(DokanFileInfo.context));
   if DokanFileInfo.context>0 then
     begin
     //DokanFileInfo.DeleteOnClose :=true; //not necessary according to doc
@@ -480,7 +487,7 @@ var path: string;
 begin
 result:=STATUS_NO_SUCH_FILE;
 path := WideCharToString(filename);
-writeln('_DeleteDirectory:'+path+ ' '+inttostr(DokanFileInfo.context));
+log('_DeleteDirectory:'+path+ ' '+inttostr(DokanFileInfo.context));
 end;
 
 function _GetFileInformation(
@@ -509,7 +516,7 @@ if path='\' then
   exit;
   end;
 
-writeln('_GetFileInformation:'+path+ ' '+inttostr(DokanFileInfo.context));
+log('_GetFileInformation:'+path+ ' '+inttostr(DokanFileInfo.context));
 
 if arch=nil then exit;
 
@@ -523,11 +530,11 @@ if i=-1 then
   i:=_locate(path,DokanFileInfo);
   //
   DokanFileInfo.Context :=i+1;
-  if DokanFileInfo.Context<>0 then  writeln('new context:'+inttostr(DokanFileInfo.Context));
+  if DokanFileInfo.Context<>0 then  log('new context:'+inttostr(DokanFileInfo.Context));
   end;
 if i=-1 then
   begin
-  writeln('_GetFileInformation:'+path+ ' no such file');
+  log('_GetFileInformation:'+path+ ' no such file',1);
   exit;
   end;
 
@@ -553,7 +560,7 @@ if zip_stat_index(arch,i,0,@stat)=-1 then exit;
       //
   Result := STATUS_SUCCESS;
   except
-  on e:exception do writeln(e.message);
+  on e:exception do log(e.message,1);
   end;
 
   end;
@@ -580,7 +587,7 @@ if path='\' then
   exit;
   end;
 
-writeln('_CreateFile:'+path+' '+inttostr(DokanFileInfo.context));
+log('_CreateFile:'+path+' '+inttostr(DokanFileInfo.context));
 
 if arch=nil then exit;
 
@@ -596,11 +603,11 @@ if i=-1 then
   i:=_locate(path,DokanFileInfo);
   //
   DokanFileInfo.Context :=i+1;
-  if DokanFileInfo.Context<>0 then writeln('new context:'+inttostr(DokanFileInfo.Context));
+  if DokanFileInfo.Context<>0 then log('new context:'+inttostr(DokanFileInfo.Context));
   end;
 if i=-1 then
   begin
-  writeln('no such file - '+inttostr(creationDisposition)+' - '+booltostr(DokanFileInfo.IsDirectory));
+  log('no such file - '+inttostr(creationDisposition)+' - '+booltostr(DokanFileInfo.IsDirectory),1);
   //this is needed so that files can execute
   if creationDisposition = CREATE_NEW
     then result := STATUS_SUCCESS
@@ -636,10 +643,10 @@ begin
 result:=STATUS_UNSUCCESSFUL;
 try
 if arch<>nil then
-   if zip_close (arch)=-1 then writeln('zip_close failed');
+   if zip_close (arch)=-1 then log('zip_close failed');
 result:=STATUS_SUCCESS;
 except
-on e:exception do writeln('_unMount:'+e.message);
+on e:exception do log('_unMount:'+e.message,1);
 end;
 end;
 
@@ -657,8 +664,8 @@ writeln('extractfiledir:'+extractfiledir('folderone\test.txt'));
 exit;
 }
 //
-writeln('******** proxy loaded ********');
-writeln('rootdirectory:'+string(widechartostring(param)));
+log('******** proxy loaded ********',1);
+log('rootdirectory:'+string(widechartostring(param)),1);
 //
 zipfile :=string(widechartostring(param));
 init;
@@ -668,13 +675,13 @@ try
 arch:=zip_open(pchar(zipfile),0,@err);
 if arch=nil then
   begin
-  writeln('_Mount:'+inttostr(err));
+  log('_Mount:'+inttostr(err),1);
   exit;
   end
-  else writeln('zip_open OK');
+  else log('zip_open OK');
   result:=true;
 except
-on e:exception do writeln('_unMount:'+e.message);
+on e:exception do log('_unMount:'+e.message,1);
 end;
 
 end;
