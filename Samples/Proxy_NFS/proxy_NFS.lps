@@ -53,9 +53,7 @@
         <Filename Value="unfs.pas"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="534"/>
-        <CursorPos X="33" Y="548"/>
+        <CursorPos X="19" Y="8"/>
         <UsageCount Value="20"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -81,54 +79,46 @@
       </Unit4>
       <Unit5>
         <Filename Value="libnfs.pas"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="103"/>
         <CursorPos X="3" Y="116"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit5>
     </Units>
-    <JumpHistory Count="10" HistoryIndex="9">
+    <JumpHistory Count="8" HistoryIndex="7">
       <Position1>
-        <Filename Value="libnfs.pas"/>
-        <Caret Line="3"/>
+        <Filename Value="unfs.pas"/>
+        <Caret Line="54" Column="49"/>
       </Position1>
       <Position2>
-        <Filename Value="libnfs.pas"/>
-        <Caret Column="9"/>
+        <Filename Value="unfs.pas"/>
+        <Caret Line="541" Column="49" TopLine="527"/>
       </Position2>
       <Position3>
         <Filename Value="unfs.pas"/>
-        <Caret Line="54" Column="49"/>
+        <Caret Line="565" TopLine="546"/>
       </Position3>
       <Position4>
         <Filename Value="unfs.pas"/>
-        <Caret Line="541" Column="49" TopLine="527"/>
+        <Caret Line="543" Column="50" TopLine="524"/>
       </Position4>
       <Position5>
         <Filename Value="unfs.pas"/>
-        <Caret Line="565" TopLine="546"/>
+        <Caret Line="543" Column="50" TopLine="530"/>
       </Position5>
       <Position6>
         <Filename Value="unfs.pas"/>
-        <Caret Line="543" Column="50" TopLine="524"/>
+        <Caret Line="552" Column="57" TopLine="539"/>
       </Position6>
       <Position7>
-        <Filename Value="libnfs.pas"/>
-        <Caret Line="233" Column="31" TopLine="220"/>
+        <Filename Value="unfs.pas"/>
+        <Caret Line="548" Column="33" TopLine="534"/>
       </Position7>
       <Position8>
         <Filename Value="unfs.pas"/>
-        <Caret Line="543" Column="50" TopLine="530"/>
+        <Caret Line="8" Column="12"/>
       </Position8>
-      <Position9>
-        <Filename Value="unfs.pas"/>
-        <Caret Line="552" Column="57" TopLine="539"/>
-      </Position9>
-      <Position10>
-        <Filename Value="unfs.pas"/>
-        <Caret Line="548" Column="32" TopLine="534"/>
-      </Position10>
     </JumpHistory>
   </ProjectSession>
 </CONFIG>

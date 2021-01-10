@@ -5,7 +5,7 @@ unit unfs;
 interface
 
 uses windows,sysutils,classes,
-    libnfs,
+    libnfs in '..\..\..\libnfs-delphi\libnfs.pas',
     Dokan,DokanWin ;
 
 function UNIXTimeToDateTimeFAST(UnixTime: LongWord): TDateTime;    
