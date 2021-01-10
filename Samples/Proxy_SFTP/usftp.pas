@@ -595,6 +595,10 @@ List: TStrings;
 begin
 result:=false;
 
+//
+debug:=false;
+//
+
 log ('******** proxy loaded ********',1);
 log('rootdirectory:'+strpas(rootdirectory),1);
 
