@@ -296,14 +296,15 @@ begin
        log('BufferLength:'+inttostr(BufferLength));
        ReadLength :=0;
        ptr:=@buffer;
-       while readlength<BufferLength do
+       while rc>0 do
          begin
          log('libssh2_sftp_read');
          //seems that max readlength is 30000 bytes...so lets loop
-         rc := libssh2_sftp_read(sftp_handle, ptr, min(4096,bufferlength));
+         rc := libssh2_sftp_read(sftp_handle, ptr, min(4096*4,bufferlength));
          if rc<=0 then break;
-         ReadLength :=ReadLength+rc;
+         inc(ReadLength ,rc);
          inc(nativeuint(ptr),rc);
+         dec(bufferlength,rc);
          end;
        log('bytes read:'+inttostr(ReadLength));
        if ReadLength>0
@@ -371,21 +372,26 @@ begin
   libssh2_sftp_seek(sftp_handle,offset);
 
   log('NumberOfBytesToWrite:'+inttostr(NumberOfBytesToWrite));
+  NumberOfBytesWritten :=0;
+  //NumberOfBytesWritten := libssh2_sftp_write(sftp_handle, @buffer, NumberOfBytesToWrite);
   //windows seems to be smart enough if NumberOfBytesWritten<NumberOfBytesToWrite
   //still we could/should it properly (code below to be reviewed)
-  NumberOfBytesWritten :=0;
-  NumberOfBytesWritten := libssh2_sftp_write(sftp_handle, @buffer, NumberOfBytesToWrite);
-  {
+
   ptr:=@buffer;
-  while NumberOfBytesWritten<NumberOfBytesToWrite do
+  while rc>0 do
     begin
     log('libssh2_sftp_write');
-    rc := libssh2_sftp_write(sftp_handle, ptr, min(4096,NumberOfBytesToWrite));
+    rc := libssh2_sftp_write(sftp_handle, ptr, min(4096*4,NumberOfBytesToWrite));
     if rc<=0 then break;
-    NumberOfBytesWritten :=NumberOfBytesWritten+rc;
+    //writeln(rc);
+    inc(NumberOfBytesWritten,rc);
+    //writeln(NumberOfBytesWritten);
     inc(nativeuint(ptr),rc);
+    dec(NumberOfBytesToWrite,rc);
+    //writeln(NumberOfBytesToWrite);
+    //writeln('.............');
     end;
-  }
+
   log('bytes written:'+inttostr(NumberOfBytesWritten));
 
   if NumberOfBytesWritten>0
