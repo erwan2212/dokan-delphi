@@ -224,7 +224,7 @@ begin
           //
           Result := STATUS_SUCCESS;
           end
-          else log('cannot libssh2_sftp_stat',1);
+          else log('cannot libssh2_sftp_stat for:'+path,1);
 
 
   end;
