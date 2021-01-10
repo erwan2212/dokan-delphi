@@ -133,7 +133,7 @@ log('path:'+path);
     sftp_handle := libssh2_sftp_opendir(sftp_session, pchar(path));
     if sftp_handle=nil then
           begin
-          log('cannot libssh2_sftp_opendir',1);
+          log('cannot libssh2_sftp_opendir:'+path,1);
           exit;
           end;
     while 1=1 do
@@ -146,9 +146,15 @@ log('path:'+path);
          log(strpas(@mem[0])+':'+inttostr(attrs.filesize));
          if ((attrs.flags and LIBSSH2_SFTP_ATTR_SIZE)=LIBSSH2_SFTP_ATTR_SIZE) then
          begin
-         if (attrs.filesize=4096) //if DokanFileInfo.isdirectory
+         if (attrs.permissions and LIBSSH2_SFTP_S_IFMT) = LIBSSH2_SFTP_S_IFDIR
+         //if (attrs.filesize=4096)
             then findData.dwFileAttributes := FILE_ATTRIBUTE_DIRECTORY
             else findData.dwFileAttributes := FILE_ATTRIBUTE_NORMAL;
+         {
+         if findData.dwFileAttributes=FILE_ATTRIBUTE_DIRECTORY
+            then DokanFileInfo.isdirectory:=true
+            else DokanFileInfo.isdirectory:=false;
+         }
          findData.nFileSizeHigh :=LARGE_INTEGER(attrs.filesize).HighPart;
          findData.nFileSizeLow  :=LARGE_INTEGER(attrs.filesize).LowPart;
          end;
@@ -210,9 +216,15 @@ begin
     rc:= libssh2_sftp_stat(sftp_session,pchar(path),@attrs) ;
     if rc=0 then
           begin
-          if attrs.filesize =4096
+          //if LIBSSH2_SFTP_S_ISDIR() ... macro ...
+          //or flags ?
+          if (attrs.permissions and LIBSSH2_SFTP_S_IFMT) = LIBSSH2_SFTP_S_IFDIR
+          //if attrs.filesize =4096 //tricky ...
              then HandleFileInformation.dwFileAttributes := FILE_ATTRIBUTE_DIRECTORY
              else HandleFileInformation.dwFileAttributes := FILE_ATTRIBUTE_NORMAL ;
+          if HandleFileInformation.dwFileAttributes=FILE_ATTRIBUTE_DIRECTORY
+             then DokanFileInfo.isdirectory:=true
+             else DokanFileInfo.isdirectory:=false;
           HandleFileInformation.nFileSizeHigh := LARGE_INTEGER(attrs.filesize ).highPart;
           HandleFileInformation.nFileSizeLow := LARGE_INTEGER(attrs.filesize).LowPart;
           DateTimeToSystemTime(UNIXTimeToDateTimeFAST(attrs.atime ),systime_);
@@ -223,8 +235,8 @@ begin
           HandleFileInformation.ftLastWriteTime :=filetime_ ;
           //
           Result := STATUS_SUCCESS;
-          end
-          else log('cannot libssh2_sftp_stat for:'+path,1);
+          end;
+          //else log('cannot libssh2_sftp_stat for:'+path,1);
 
 
   end;
@@ -259,6 +271,8 @@ begin
   log('_ReadFile');
   log(path);
 
+  if DokanFileInfo.isdirectory=true then exit;
+
   if DokanFileInfo.Context <>0 then sftp_handle :=pointer(DokanFileInfo.Context);
   if DokanFileInfo.Context =0 then
      begin
@@ -270,7 +284,7 @@ begin
 
     if sftp_handle=nil then
           begin
-          log('cannot libssh2_sftp_open',1);
+          log('cannot libssh2_sftp_open:'+path,1);
           exit;
           end;
 
@@ -294,7 +308,7 @@ begin
        log('bytes read:'+inttostr(ReadLength));
        if ReadLength>0
           then Result := STATUS_SUCCESS
-          else log('libssh2_sftp_read failed',1);
+          else log('libssh2_sftp_read failed:'+path,1);
 
       //end; //while 1=1 do
 
